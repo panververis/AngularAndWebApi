@@ -26,7 +26,7 @@ namespace AngularAndWebApi.Migrations
         /// </summary>
         protected override void Seed(AngularAndWebApi.Models.AngularAndWebApiContext context)
         {
-            
+
             #region Entities' variables declaration
 
             Area northArea, southArea;
@@ -43,85 +43,53 @@ namespace AngularAndWebApi.Migrations
 
             #endregion
 
-            #region Defining the total of the data
-
             #region Areas handling
 
-            #region Areas Initialization
-
+            // Areas Initialization
             northArea = new Area() { Name = "North Area", ID = 1 };
             southArea = new Area() { Name = "South Area", ID = 2 };
 
-            #endregion
+            // Areas "Upsert" operations
+            context.Areas.AddOrUpdate(x => x.ID,
+                    northArea, southArea);
 
-            #region Areas "Upsert" operations
-
-            context.Areas.AddOrUpdate(
-                    x => x.ID,
-                    northArea,
-                    southArea
-                );
-
-            #endregion
-
+            // Posting the Entities
             context.SaveChanges();
 
-            #region Retrieving the posted Areas (along with their updated IDs)
-
+            // Retrieving the posted Areas (along with their updated IDs)
             northArea = context.Areas.FirstOrDefault(x => x.Name == northArea.Name);
             southArea = context.Areas.FirstOrDefault(x => x.Name == southArea.Name);
 
             #endregion
 
-            #region
-
-            #endregion
-
-            #endregion
-
             #region Regions handling
 
-            #region Regions Initialization
-
-            //Creating the initial Regions. There will be four initial Regions
+            // Regions Initialization
             northernRegionA = new Region() { Name = "Northern Region A", ID = 1, AreaID = northArea.ID };
             northernRegionB = new Region() { Name = "Northern Region B", ID = 2, AreaID = northArea.ID };
             southernRegionA = new Region() { Name = "Southern Region A", ID = 3, AreaID = southArea.ID };
             southernRegionB = new Region() { Name = "Southern Region B", ID = 4, AreaID = southArea.ID };
 
-            #endregion
+            // Regions "Upsert" Operations
+            context.Regions.AddOrUpdate(x => x.ID,
+                    northernRegionA, northernRegionB, southernRegionA, southernRegionB);
 
-            #region Regions "Upsert" Operations
-
-            context.Regions.AddOrUpdate(
-                    x => x.ID,
-                    northernRegionA,
-                    northernRegionB,
-                    southernRegionA,
-                    southernRegionB
-                );
-
-            #endregion
-
-            //posting the changes to the DB
+            // Posting the changes to the DB
             context.SaveChanges();
 
-            #region Retrieving the posted Regions (along with their updated IDs)
-
+            // Retrieving the posted Regions (along with their updated IDs)
             northernRegionA = context.Regions.FirstOrDefault(x => x.Name == northernRegionA.Name);
             northernRegionB = context.Regions.FirstOrDefault(x => x.Name == northernRegionB.Name);
             southernRegionA = context.Regions.FirstOrDefault(x => x.Name == southernRegionA.Name);
             southernRegionB = context.Regions.FirstOrDefault(x => x.Name == southernRegionB.Name);
 
-            #endregion
 
             #endregion
 
             #region Vehicles handling
 
-            #region Vehicles Initialization
-
-            vehicle1  = new Vehicle()  { Model = "Toyota Avensis", MakeYear = 2014, ChassisNumber = "Chassis_Num_1",  EngineCapacity = 1400, ID = 1  };
+            // Vehicles Initialization
+            vehicle1 = new Vehicle()  { Model = "Toyota Avensis", MakeYear = 2014, ChassisNumber = "Chassis_Num_1",  EngineCapacity = 1400, ID = 1  };
             vehicle2  = new Vehicle()  { Model = "Toyota Avensis", MakeYear = 2014, ChassisNumber = "Chassis_Num_2",  EngineCapacity = 1400, ID = 2  };
             vehicle3  = new Vehicle()  { Model = "Toyota Avensis", MakeYear = 2014, ChassisNumber = "Chassis_Num_3",  EngineCapacity = 1400, ID = 3  };
             vehicle4  = new Vehicle()  { Model = "Toyota Avensis", MakeYear = 2015, ChassisNumber = "Chassis_Num_4",  EngineCapacity = 1600, ID = 4  };
@@ -145,20 +113,15 @@ namespace AngularAndWebApi.Migrations
             vehicle19 = new Vehicle()  { Model = "Scoda Fabia",    MakeYear = 2012, ChassisNumber = "Chassis_Num_19", EngineCapacity = 2000, ID = 19 };
             vehicle20 = new Vehicle()  { Model = "Scoda Fabia",    MakeYear = 2013, ChassisNumber = "Chassis_Num_20", EngineCapacity = 2000, ID = 20 };
 
-            #endregion
-
-            #region Vehicles "Upsert" Operations
-
+            // Vehicles "Upsert" Operations
             context.Vehicles.AddOrUpdate(x => x.ID,
                     vehicle1, vehicle2, vehicle3, vehicle4, vehicle5, vehicle6, vehicle7, vehicle8, vehicle9, vehicle10,
                         vehicle11, vehicle12, vehicle13, vehicle14, vehicle15, vehicle16, vehicle17, vehicle18, vehicle19, vehicle20);
 
-            #endregion
-
+            // Posting the Entities to the DB
             context.SaveChanges();
 
-            #region Retrieving the posted Vehicles (along with their updated IDs)
-
+            // Retrieving the posted Vehicles (along with their updated IDs)
             vehicle1 =  context.Vehicles.FirstOrDefault(x => x.ChassisNumber ==  vehicle1.ChassisNumber);
             vehicle2 =  context.Vehicles.FirstOrDefault(x => x.ChassisNumber ==  vehicle2.ChassisNumber);
             vehicle3 =  context.Vehicles.FirstOrDefault(x => x.ChassisNumber ==  vehicle3.ChassisNumber);
@@ -182,30 +145,22 @@ namespace AngularAndWebApi.Migrations
 
             #endregion
 
-            #endregion
-
             #region Dealers handling
 
-            #region Dealers Initialization
-
+            // Dealers Initialization
             northernADealer = new Dealer() { Name = "Northern Dealer A", RegionID = northernRegionA.ID, ID = 1 };
             northernBDealer = new Dealer() { Name = "Northern Dealer B", RegionID = northernRegionB.ID, ID = 2 };
             southernADealer = new Dealer() { Name = "Southern Dealer A", RegionID = southernRegionA.ID, ID = 3 };
             southernBDealer = new Dealer() { Name = "Southern Dealer B", RegionID = southernRegionB.ID, ID = 4 };
 
-            #endregion
-
-            #region Regions "Upsert" Operations
-
+            // Regions "Upsert" Operations
             context.Dealers.AddOrUpdate(x => x.ID,
                     northernADealer, northernBDealer, southernADealer, southernBDealer);
 
-            #endregion
-
+            // Posting the Entities to the DB
             context.SaveChanges();
 
-            #region Retrieving the posted Dealers (along with their updated IDs)
-
+            // Retrieving the posted Dealers (along with their updated IDs)
             northernADealer = context.Dealers.FirstOrDefault(x => x.Name == northernADealer.Name);
             northernBDealer = context.Dealers.FirstOrDefault(x => x.Name == northernBDealer.Name);
             southernADealer = context.Dealers.FirstOrDefault(x => x.Name == southernADealer.Name);
@@ -213,12 +168,9 @@ namespace AngularAndWebApi.Migrations
 
             #endregion
 
-            #endregion
-
             #region Staff handling
 
-            #region Staff Initialization
-
+            // Staff Initialization
             northernADealerSalesStaff1 = new Staff() { DealerID = northernADealer.ID, FirstName = "Joycelyn",   LastName = "Hartsock",      JobType = JobType.SalesRep,     ID = 1 };
             northernADealerSalesStaff2 = new Staff() { DealerID = northernADealer.ID, FirstName = "Domingo",    LastName = "Clem",          JobType = JobType.SalesRep,     ID = 2 };
             northernADealerSalesStaff3 = new Staff() { DealerID = northernADealer.ID, FirstName = "Glen",       LastName = "Bollig",        JobType = JobType.Accounting,   ID = 3 };
@@ -236,22 +188,17 @@ namespace AngularAndWebApi.Migrations
             southernBDealerSalesStaff3 = new Staff() { DealerID = southernBDealer.ID, FirstName = "Tameka",     LastName = "Pawlowicz",     JobType = JobType.Accounting,   ID = 15 };
             southernBDealerSalesStaff4 = new Staff() { DealerID = southernBDealer.ID, FirstName = "Giuseppe",   LastName = "Beckmann",      JobType = JobType.Manager,      ID = 16 };
 
-            #endregion
-
-            #region Staff "Upsert" Operations
-
+            // Staff "Upsert" Operations
             context.Staffs.AddOrUpdate(x => x.ID,
                     northernADealerSalesStaff1, northernADealerSalesStaff2, northernADealerSalesStaff3, northernADealerSalesStaff4, 
-                    northernBDealerSalesStaff1, northernBDealerSalesStaff2, northernBDealerSalesStaff3, northernBDealerSalesStaff4,
-                    southernADealerSalesStaff1, southernADealerSalesStaff2, southernADealerSalesStaff3, southernADealerSalesStaff4,
-                    southernBDealerSalesStaff1, southernBDealerSalesStaff2, southernBDealerSalesStaff3, southernBDealerSalesStaff4);
+                        northernBDealerSalesStaff1, northernBDealerSalesStaff2, northernBDealerSalesStaff3, northernBDealerSalesStaff4,
+                            southernADealerSalesStaff1, southernADealerSalesStaff2, southernADealerSalesStaff3, southernADealerSalesStaff4,
+                                southernBDealerSalesStaff1, southernBDealerSalesStaff2, southernBDealerSalesStaff3, southernBDealerSalesStaff4);
 
-            #endregion
-
+            // Posting the Entities to the DB
             context.SaveChanges();
 
-            #region Retrieving the posted Staff (along with their updated IDs)
-
+            // Retrieving the posted Staff (along with their updated IDs)
             northernADealerSalesStaff1 = context.Staffs.FirstOrDefault(x => x.FirstName == northernADealerSalesStaff1.FirstName && x.LastName == northernADealerSalesStaff1.LastName);
             northernADealerSalesStaff2 = context.Staffs.FirstOrDefault(x => x.FirstName == northernADealerSalesStaff2.FirstName && x.LastName == northernADealerSalesStaff2.LastName);
             northernADealerSalesStaff3 = context.Staffs.FirstOrDefault(x => x.FirstName == northernADealerSalesStaff3.FirstName && x.LastName == northernADealerSalesStaff3.LastName);
@@ -270,12 +217,9 @@ namespace AngularAndWebApi.Migrations
 
             #endregion
 
-            #endregion
-
             #region Sales handling
 
-            #region Sales Initialization
-
+            // Sales Initialization
             sale1 = new Sale()  { DealerID = northernADealer.ID, SaleDate = DateTime.Today,
                 StaffID = northernADealerSalesStaff1.ID, VehicleID = vehicle1.ID, ID = 1, SaleValue = 100 };
             sale2 = new Sale()  { DealerID = northernADealer.ID, SaleDate = DateTime.Today,
@@ -317,19 +261,16 @@ namespace AngularAndWebApi.Migrations
             sale20 = new Sale() { DealerID = southernADealer.ID, SaleDate = DateTime.Today.AddDays(3),
                 StaffID = southernADealerSalesStaff2.ID, VehicleID = vehicle20.ID, ID = 20, SaleValue = 380 };
 
-            #endregion
-
-            #region Sales "Upsert" Operations
-
+            // Sales "Upsert" Operations
             context.Sales.AddOrUpdate(x => x.ID,
                     sale1, sale2, sale3, sale4, sale5, sale6, sale7, sale8, sale9, sale10,
                         sale11, sale12, sale13, sale14, sale15, sale16, sale17, sale18, sale19, sale20);
 
-            #endregion
+            // Posting the Entities to the DB
+            context.SaveChanges();
 
             #endregion
 
-            #endregion
         }
     }
 }
