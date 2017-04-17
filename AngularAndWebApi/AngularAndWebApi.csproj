@@ -189,8 +189,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704171647212_Initial_Migration.cs" />
+    <Compile Include="Migrations\201704171647212_Initial_Migration.Designer.cs">
+      <DependentUpon>201704171647212_Initial_Migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AngularAndWebApiContext.cs" />
+    <Compile Include="DBContext\AngularAndWebApiContext.cs" />
     <Compile Include="Models\Domain Objects\Area.cs" />
     <Compile Include="Models\Domain Objects\Dealer.cs" />
     <Compile Include="Models\Domain Objects\Region.cs" />
@@ -256,7 +260,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -282,6 +288,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704171647212_Initial_Migration.resx">
+      <DependentUpon>201704171647212_Initial_Migration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
