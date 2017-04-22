@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -15,19 +11,21 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 {
     public class RegionsController : ApiController
     {
-        private AngularAndWebApiContext db = new AngularAndWebApiContext();
+
+        // Initializing the DBContext
+        private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
         // GET: api/Regions
         public IQueryable<Region> GetRegions()
         {
-            return db.Regions;
+            return _DB.Regions;
         }
 
         // GET: api/Regions/5
         [ResponseType(typeof(Region))]
         public async Task<IHttpActionResult> GetRegion(int id)
         {
-            Region region = await db.Regions.FindAsync(id);
+            Region region = await _DB.Regions.FindAsync(id);
             if (region == null)
             {
                 return NotFound();
@@ -50,11 +48,11 @@ namespace AngularAndWebApi.Controllers.API_Controllers
                 return BadRequest();
             }
 
-            db.Entry(region).State = EntityState.Modified;
+            _DB.Entry(region).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                await _DB.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,8 +78,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Regions.Add(region);
-            await db.SaveChangesAsync();
+            _DB.Regions.Add(region);
+            await _DB.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = region.ID }, region);
         }
@@ -90,14 +88,14 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         [ResponseType(typeof(Region))]
         public async Task<IHttpActionResult> DeleteRegion(int id)
         {
-            Region region = await db.Regions.FindAsync(id);
+            Region region = await _DB.Regions.FindAsync(id);
             if (region == null)
             {
                 return NotFound();
             }
 
-            db.Regions.Remove(region);
-            await db.SaveChangesAsync();
+            _DB.Regions.Remove(region);
+            await _DB.SaveChangesAsync();
 
             return Ok(region);
         }
@@ -106,14 +104,14 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _DB.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool RegionExists(int id)
         {
-            return db.Regions.Count(e => e.ID == id) > 0;
+            return _DB.Regions.Count(e => e.ID == id) > 0;
         }
     }
 }

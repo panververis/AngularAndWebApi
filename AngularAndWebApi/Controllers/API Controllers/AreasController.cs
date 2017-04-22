@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -15,105 +11,178 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 {
     public class AreasController : ApiController
     {
-        private AngularAndWebApiContext db = new AngularAndWebApiContext();
 
+        // Initializing the DBContext
+        private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
+
+        /////////////////////////// API Exposed Methods
         // GET: api/Areas
-        public IQueryable<Area> GetAreas()
-        {
-            return db.Areas;
+        #region Get (All) Areas
+
+        /// <summary>
+        /// API method getting all the Areas in an IQueryable
+        /// </summary>
+        public IQueryable<Area> GetAreas() {
+
+            // Returning the DBContext's Areas
+            return _DB.Areas;
         }
 
+        #endregion
+
         // GET: api/Areas/5
+        #region Get (Specific) Area (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Area by the provided as input ID
+        /// </summary>
         [ResponseType(typeof(Area))]
-        public async Task<IHttpActionResult> GetArea(int id)
+        public async Task<IHttpActionResult> GetArea(int ID)
         {
-            Area area = await db.Areas.FindAsync(id);
-            if (area == null)
-            {
+            // Attempting to fetch the Area
+            Area area = await _DB.Areas.FindAsync(ID);
+
+            // If not fetched, return a NotFoundResult
+            if (area == null) {
                 return NotFound();
             }
 
+            // Return an OkResult, with the Area
             return Ok(area);
         }
 
+        #endregion
+
         // PUT: api/Areas/5
+        #region Put an Area
+
+        /// <summary>
+        /// API Method Putting an Area (identified by ID)
+        /// </summary>
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutArea(int id, Area area)
+        public async Task<IHttpActionResult> PutArea(int ID, Area Area)
         {
+            // If the ModelState is not valid, return a BadRequestResult
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != area.ID)
+            // Validation: If the provided as input ID and the Area to be put are not matching,
+            // return a BadRequestResult
+            if (ID != Area.ID)
             {
                 return BadRequest();
             }
 
-            db.Entry(area).State = EntityState.Modified;
+            // Mark the Area's State as modified
+            _DB.Entry(Area).State = EntityState.Modified;
 
-            try
-            {
-                await db.SaveChangesAsync();
+            // Attempt to Save any changes made
+            try {
+                await _DB.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AreaExists(id))
-                {
+            catch (DbUpdateConcurrencyException) {
+
+                // If the referenced Area does not exist, return a NotFoundResult
+                if (!AreaExists(ID)) {
                     return NotFound();
                 }
-                else
-                {
+
+                // ..else simply throw
+                else {
                     throw;
                 }
             }
 
+            // Return a Status Code of "No Content", as no Content need be returned
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        #endregion
+
         // POST: api/Areas
+        #region Post an Area
+
+        /// <summary>
+        /// API Method posting an Area
+        /// </summary>
         [ResponseType(typeof(Area))]
-        public async Task<IHttpActionResult> PostArea(Area area)
+        public async Task<IHttpActionResult> PostArea(Area Area)
         {
+            // In case the ModelState is not valid, return a BadRequestResult
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Areas.Add(area);
-            await db.SaveChangesAsync();
+            // Add the new Area to the DBContext's Areas
+            _DB.Areas.Add(Area);
 
-            return CreatedAtRoute("DefaultApi", new { id = area.ID }, area);
+            // Attempt to Save the Change
+            await _DB.SaveChangesAsync();
+
+            // Return a CreatedAtRouteResult
+            return CreatedAtRoute("DefaultApi", new { id = Area.ID }, Area);
         }
 
+        #endregion
+
         // DELETE: api/Areas/5
+        #region Delete an Area
+
+        /// <summary>
+        /// API Method Deleting an Area
+        /// </summary>
         [ResponseType(typeof(Area))]
-        public async Task<IHttpActionResult> DeleteArea(int id)
+        public async Task<IHttpActionResult> DeleteArea(int ID)
         {
-            Area area = await db.Areas.FindAsync(id);
+            // Fetching the referenced Area
+            Area area = await _DB.Areas.FindAsync(ID);
+
+            // In case this Area could not be found, return a NotFoundResult
             if (area == null)
             {
                 return NotFound();
             }
 
-            db.Areas.Remove(area);
-            await db.SaveChangesAsync();
+            // Remove the referenced Area from the DBContext's Areas
+            _DB.Areas.Remove(area);
 
+            // Attempt to Save the Changes
+            await _DB.SaveChangesAsync();
+
+            // Return an OkResult yielding the referenced Area
             return Ok(area);
         }
 
-        protected override void Dispose(bool disposing)
+        #endregion
+        ///////////////////////////
+
+        #region Overrides
+
+        protected override void Dispose(bool Disposing)
         {
-            if (disposing)
+            if (Disposing)
             {
-                db.Dispose();
+                _DB.Dispose();
             }
-            base.Dispose(disposing);
+            base.Dispose(Disposing);
         }
 
-        private bool AreaExists(int id)
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Private helper method checking whether a specific Area (identified by ID) exists
+        /// </summary>
+        private bool AreaExists(int ID)
         {
-            return db.Areas.Count(e => e.ID == id) > 0;
+            return _DB.Areas.Count(e => e.ID == ID) > 0;
         }
+
+        #endregion
+
     }
 }
