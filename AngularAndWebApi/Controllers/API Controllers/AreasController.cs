@@ -37,8 +37,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API Method getting a specific Area by the provided as input ID
         /// </summary>
         [ResponseType(typeof(Area))]
-        public async Task<IHttpActionResult> GetArea(int ID)
-        {
+        public async Task<IHttpActionResult> GetArea(int ID) {
+
             // Attempting to fetch the Area
             Area area = await _DB.Areas.FindAsync(ID);
 
@@ -60,18 +60,16 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API Method Putting an Area (identified by ID)
         /// </summary>
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutArea(int ID, Area Area)
-        {
+        public async Task<IHttpActionResult> PutArea(int ID, Area Area) {
+
             // If the ModelState is not valid, return a BadRequestResult
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            // Validation: If the provided as input ID and the Area to be put are not matching,
+            // Validation: If the provided as input ID and the Area's to be put are not matching,
             // return a BadRequestResult
-            if (ID != Area.ID)
-            {
+            if (ID != Area.ID) {
                 return BadRequest();
             }
 
@@ -111,8 +109,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         public async Task<IHttpActionResult> PostArea(Area Area)
         {
             // In case the ModelState is not valid, return a BadRequestResult
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
@@ -141,8 +138,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             Area area = await _DB.Areas.FindAsync(ID);
 
             // In case this Area could not be found, return a NotFoundResult
-            if (area == null)
-            {
+            if (area == null) {
                 return NotFound();
             }
 
@@ -163,8 +159,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 
         protected override void Dispose(bool Disposing)
         {
-            if (Disposing)
-            {
+            if (Disposing) {
                 _DB.Dispose();
             }
             base.Dispose(Disposing);
@@ -177,8 +172,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// <summary>
         /// Private helper method checking whether a specific Area (identified by ID) exists
         /// </summary>
-        private bool AreaExists(int ID)
-        {
+        private bool AreaExists(int ID)  {
             return _DB.Areas.Count(e => e.ID == ID) > 0;
         }
 

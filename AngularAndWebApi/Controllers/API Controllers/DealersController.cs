@@ -41,8 +41,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API Method getting a specific Dealer by the provided as input ID
         /// </summary>
         [ResponseType(typeof(Dealer))]
-        public async Task<IHttpActionResult> GetDealer(int ID)
-        {
+        public async Task<IHttpActionResult> GetDealer(int ID) {
+
             // Attempting to fetch the Dealer
             Dealer dealer = await _DB.Dealers.FindAsync(ID);
 
@@ -65,8 +65,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API Method Putting a Dealer (identified by ID)
         /// </summary>
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDealer(int ID, Dealer Dealer)
-        {
+        public async Task<IHttpActionResult> PutDealer(int ID, Dealer Dealer) {
 
             // If the ModelState is not valid, return a BadRequestResult
             if (!ModelState.IsValid)
@@ -114,11 +113,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API Method posting a Dealer
         /// </summary>
         [ResponseType(typeof(Dealer))]
-        public async Task<IHttpActionResult> PostDealer(Dealer Dealer)
-        {
+        public async Task<IHttpActionResult> PostDealer(Dealer Dealer) {
+
             // In case the ModelState is not valid, return a BadRequestResult
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
@@ -138,18 +136,16 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Delete a Dealer
 
         /// <summary>
-        /// API Method Deleting an Area
+        /// API Method Deleting a Dealer
         /// </summary>
         [ResponseType(typeof(Dealer))]
-        public async Task<IHttpActionResult> DeleteDealer(int ID)
-        {
+        public async Task<IHttpActionResult> DeleteDealer(int ID) {
 
             // Fetching the referenced Dealer
             Dealer dealer = await _DB.Dealers.FindAsync(ID);
 
             // In case this Dealer could not be found, return a NotFoundResult
-            if (dealer == null)
-            {
+            if (dealer == null) {
                 return NotFound();
             }
 
@@ -168,10 +164,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 
         #region Overrides
 
-        protected override void Dispose(bool Disposing)
-        {
-            if (Disposing)
-            {
+        protected override void Dispose(bool Disposing) {
+            if (Disposing) {
                 _DB.Dispose();
             }
             base.Dispose(Disposing);
@@ -184,8 +178,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// <summary>
         /// Private helper method checking whether a specific Dealer (identified by ID) exists
         /// </summary>
-        private bool DealerExists(int ID)
-        {
+        private bool DealerExists(int ID) {
             return _DB.Dealers.Count(e => e.ID == ID) > 0;
         }
 

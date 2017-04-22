@@ -15,105 +15,170 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 {
     public class SalesController : ApiController
     {
-        private AngularAndWebApiContext db = new AngularAndWebApiContext();
 
+        // Initializing the DBContext
+        private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
+
+        /////////////////////////// API Exposed Methods
         // GET: api/Sales
-        public IQueryable<Sale> GetSales()
-        {
-            return db.Sales;
+        #region  Get (All) Sales
+
+        /// <summary>
+        /// API method getting all the Sales in an IQueryable
+        /// </summary>
+        public IQueryable<Sale> GetSales() {
+
+            // Returning the DBContext's Sales
+            return _DB.Sales;
         }
 
+        #endregion
+
         // GET: api/Sales/5
+        #region Get (Specific) Sale (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Sale by the provided as input ID
+        /// </summary>
         [ResponseType(typeof(Sale))]
-        public async Task<IHttpActionResult> GetSale(int id)
-        {
-            Sale sale = await db.Sales.FindAsync(id);
-            if (sale == null)
-            {
+        public async Task<IHttpActionResult> GetSale(int ID) {
+
+            // Attempting to fetch the Sale
+            Sale sale = await _DB.Sales.FindAsync(ID);
+
+            // If not fetched, return a NotFoundResult
+            if (sale == null) {
                 return NotFound();
             }
 
+            // Return an OkResult, with the Sale
             return Ok(sale);
         }
 
+        #endregion
+
         // PUT: api/Sales/5
+        #region Put a Sale
+
+        /// <summary>
+        /// API Method Putting a Sale (identified by ID)
+        /// </summary>
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutSale(int id, Sale sale)
-        {
-            if (!ModelState.IsValid)
-            {
+        public async Task<IHttpActionResult> PutSale(int ID, Sale Sale) {
+
+            // If the ModelState is not valid, return a BadRequestResult
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            if (id != sale.ID)
-            {
+            // Validation: If the provided as input ID and the Sale's to be put are not matching,
+            // return a BadRequestResult
+            if (ID != Sale.ID) {
                 return BadRequest();
             }
 
-            db.Entry(sale).State = EntityState.Modified;
+            // Mark the Sale's State as "Modified"
+            _DB.Entry(Sale).State = EntityState.Modified;
 
-            try
-            {
-                await db.SaveChangesAsync();
+            // Attempt to Save any changes made
+            try {
+                await _DB.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SaleExists(id))
-                {
+            catch (DbUpdateConcurrencyException) {
+                // If the referenced Sale does not exist, return a NotFoundResult
+                if (!SaleExists(ID)) {
                     return NotFound();
                 }
-                else
-                {
+
+                // ..else simply throw
+                else {
                     throw;
                 }
             }
 
+            // Return a Status Code of "No Content", as no Content need be returned
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        #endregion
+
         // POST: api/Sales
+        #region Post a Sale
+
+        /// <summary>
+        /// API Method posting a Sale
+        /// </summary>
         [ResponseType(typeof(Sale))]
-        public async Task<IHttpActionResult> PostSale(Sale sale)
-        {
-            if (!ModelState.IsValid)
-            {
+        public async Task<IHttpActionResult> PostSale(Sale Sale) {
+
+            // In case the ModelState is not valid, return a BadRequestResult
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            db.Sales.Add(sale);
-            await db.SaveChangesAsync();
+            // Add the new Sale to the DBContext's Sales
+            _DB.Sales.Add(Sale);
 
-            return CreatedAtRoute("DefaultApi", new { id = sale.ID }, sale);
+            // Attempt to Save the Change
+            await _DB.SaveChangesAsync();
+
+            // Return a CreatedAtRouteResult
+            return CreatedAtRoute("DefaultApi", new { id = Sale.ID }, Sale);
         }
 
+        #endregion
+
         // DELETE: api/Sales/5
+        #region Delete a Sale
+
+        /// <summary>
+        /// API Method Deleting a Sale
+        /// </summary>
         [ResponseType(typeof(Sale))]
-        public async Task<IHttpActionResult> DeleteSale(int id)
-        {
-            Sale sale = await db.Sales.FindAsync(id);
-            if (sale == null)
-            {
+        public async Task<IHttpActionResult> DeleteSale(int ID) {
+
+            // Fetching the referenced Sale
+            Sale sale = await _DB.Sales.FindAsync(ID);
+
+            // In case this Sale could not be found, return a NotFoundResult
+            if (sale == null)  {
                 return NotFound();
             }
 
-            db.Sales.Remove(sale);
-            await db.SaveChangesAsync();
+            // Remove the referenced Sale from the DBContext's Sales
+            _DB.Sales.Remove(sale);
 
+            // Attempt to Save the Changes
+            await _DB.SaveChangesAsync();
+
+            // Return an OkResult yielding the referenced Region
             return Ok(sale);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
+        #endregion
+        ///////////////////////////
+
+        #region Overrides
+
+        protected override void Dispose(bool Disposing) {
+            if (Disposing) {
+                _DB.Dispose();
             }
-            base.Dispose(disposing);
+            base.Dispose(Disposing);
         }
 
-        private bool SaleExists(int id)
-        {
-            return db.Sales.Count(e => e.ID == id) > 0;
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Private helper method checking whether a specific Sale (identified by ID) exists
+        /// </summary>
+        private bool SaleExists(int ID) {
+            return _DB.Sales.Count(e => e.ID == ID) > 0;
         }
+
+        #endregion
+
     }
 }
