@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers
 {
@@ -15,17 +16,21 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
+        #region API Exposed Methods
+
         // GET: api/Areas
         #region Get (All) Areas
 
         /// <summary>
-        /// API method getting all the Areas in an IQueryable
+        /// API method getting all the Areas (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Area> GetAreas() {
+        public IQueryable<AreaDTO> GetAreas() {
 
-            // Returning the DBContext's Areas
-            return _DB.Areas;
+            // Getting all of the DbContext's Books in a IQueryable of BooksDTOs
+            IQueryable<AreaDTO> books = _DB.Areas.Select(x => new AreaDTO() { ID = x.ID, Name = x.Name });
+
+            // Returning the BooksDTOs' IQueryable
+            return books;
         }
 
         #endregion
@@ -153,7 +158,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         }
 
         #endregion
-        ///////////////////////////
+
+        #endregion
 
         #region Overrides
 

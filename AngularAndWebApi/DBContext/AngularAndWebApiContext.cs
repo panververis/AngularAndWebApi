@@ -1,35 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AngularAndWebApi.DBContext;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Interception;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Web;
 
-namespace AngularAndWebApi.Models
-{
-    public class AngularAndWebApiContext : DbContext
-    {
-        // You can add custom code to this file. Changes will not be overwritten.
-        // 
-        // If you want Entity Framework to drop and regenerate your database
-        // automatically whenever you change your model schema, please use data migrations.
-        // For more information refer to the documentation:
-        // http://msdn.microsoft.com/en-us/data/jj591621.aspx
-    
-        public AngularAndWebApiContext() : base("name=AngularAndWebApiContext"){}
+namespace AngularAndWebApi.Models {
+
+    public class AngularAndWebApiContext : DbContext {
+
+        #region Fields (All of the DBContext's available DBSets)
 
         public DbSet<Area>          Areas    { get; set; }
-
         public DbSet<Dealer>        Dealers  { get; set; }
-
         public DbSet<Region>        Regions  { get; set; }
-
         public DbSet<Sale>          Sales    { get; set; }
-
         public DbSet<Staff>         Staffs   { get; set; }
-
         public DbSet<Vehicle>       Vehicles { get; set; }
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// DBContext constructor. Also registers the DBCommand Interceptor
+        /// </summary>
+        public AngularAndWebApiContext() : base("name=AngularAndWebApiContext") {
+            DbInterception.Add(new MyDBCommandInterceptor());
+        }
+
+        #endregion
+
+        #region Event Handlers
 
         /// <summary>
         /// OnModelCreating override, used to remove the EF's default "OnDeleteCascade" conventions.
@@ -43,8 +43,9 @@ namespace AngularAndWebApi.Models
             // Disabling all OnDeleteCascade options
             ModelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             ModelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
-
         }
+
+        #endregion
 
     }
 

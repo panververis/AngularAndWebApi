@@ -186,6 +186,7 @@
     <Compile Include="Controllers\API Controllers\VehiclesController.cs" />
     <Compile Include="Controllers\Default Controllers\HomeController.cs" />
     <Compile Include="Controllers\Default Controllers\ValuesController.cs" />
+    <Compile Include="DBContext\DBCommandInterceptor.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
