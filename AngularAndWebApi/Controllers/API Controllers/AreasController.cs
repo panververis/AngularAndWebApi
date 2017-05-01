@@ -39,21 +39,27 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Get (Specific) Area (by ID)
 
         /// <summary>
-        /// API Method getting a specific Area by the provided as input ID
+        /// API Method getting a specific Area (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Area))]
+        [ResponseType(typeof(AreaDTO))]
         public async Task<IHttpActionResult> GetArea(int ID) {
 
             // Attempting to fetch the Area
-            Area area = await _DB.Areas.FindAsync(ID);
+            AreaDTO areaDTO = await _DB
+                                       .Areas
+                                        .Select(x => new AreaDTO() {
+                                            ID = x.ID,
+                                            Name = x.Name
+                                        }
+                                                ).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (area == null) {
+            if (areaDTO == null) {
                 return NotFound();
             }
 
             // Return an OkResult, with the Area
-            return Ok(area);
+            return Ok(areaDTO);
         }
 
         #endregion
