@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
 using AngularAndWebApi.Models.DTOs;
+using System.Collections.Generic;
 
 namespace AngularAndWebApi.Controllers.API_Controllers
 {
@@ -15,8 +16,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
-
-        #region API Exposed Methods
 
         // GET: api/Areas
         #region Get (All) Areas
@@ -28,6 +27,39 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 
             // Getting all of the DbContext's Books in a IQueryable of BooksDTOs
             IQueryable<AreaDTO> books = _DB.Areas.Select(x => new AreaDTO() { ID = x.ID, Name = x.Name });
+
+            // Returning the BooksDTOs' IQueryable
+            return books;
+        }
+
+        #endregion
+
+        // GET: api/AreasAndDetails
+        #region Get (All) Areas and their Details
+
+        /// <summary>
+        /// API method getting all the Areas and their Details (Regions) (in DTOs) in an IQueryable,
+        /// utilizing Web.Api2 Attributes Routing
+        /// </summary>
+        [Route("api/areasanddetails")]
+        public IQueryable<AreaDTO> GetAreasAndDetails() {
+
+            // Getting all of the DbContext's Books in a IQueryable of BooksDTOs
+            IQueryable<AreaDTO> books = _DB
+                                        .Areas
+                                            .Include(x => x.Regions)
+                                                .Select(x => new AreaDTO() 
+                                                    {
+                                                        ID = x.ID,
+                                                        Name = x.Name,
+                                                        Regions = x.Regions
+                                                                   .Select(y => new RegionDTO() {
+                                                                       ID = y.ID,
+                                                                       Name = y.Name
+                                                                   }
+                                                                           )
+                                                                        .ToList()
+                                                        });
 
             // Returning the BooksDTOs' IQueryable
             return books;
@@ -52,6 +84,44 @@ namespace AngularAndWebApi.Controllers.API_Controllers
                                             Name = x.Name
                                         }
                                                 ).FirstOrDefaultAsync(x => x.ID == ID);
+
+            // If not fetched, return a NotFoundResult
+            if (areaDTO == null) {
+                return NotFound();
+            }
+
+            // Return an OkResult, with the Area
+            return Ok(areaDTO);
+        }
+
+        #endregion
+
+        // GET: api/AreaAndDetails/5
+        #region Get (Specific) Area and its Details (Regions) (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Area (in DTO) along with its Details (Regions), by the provided as input ID
+        /// </summary>
+        [Route("api/areaanddetails/{ID}")]
+        [ResponseType(typeof(AreaDTO))]
+        public async Task<IHttpActionResult> GetAreaAndDetails(int ID) {
+
+            // Attempting to fetch the Area
+            AreaDTO areaDTO = await _DB
+                                       .Areas
+                                        .Select(x => new AreaDTO() {
+                                            ID = x.ID,
+                                            Name = x.Name,
+                                            Regions = x.Regions
+                                                         .Select(y => new RegionDTO() 
+                                                            {
+                                                             ID = y.ID,
+                                                             Name = y.Name
+                                                             }
+                                                                 )
+                                                                    .ToList()
+                                            })
+                                                .FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
             if (areaDTO == null) {
@@ -162,8 +232,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             // Return an OkResult yielding the referenced Area
             return Ok(area);
         }
-
-        #endregion
 
         #endregion
 
