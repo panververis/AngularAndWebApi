@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers {
 
@@ -14,17 +15,27 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
         // GET: api/Vehicles
         #region  Get (All) Vehicles
 
         /// <summary>
-        /// API method getting all the Vehicles in an IQueryable
+        /// API method getting all the Vehicles (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Vehicle> GetVehicles() {
+        public IQueryable<VehicleDTO> GetVehicles() {
 
-            // Returning the DBContext's Vehicles
-            return _DB.Vehicles;
+            // Getting all of the DbContext's Vehicles in a IQueryable of VehicleDTOs
+            IQueryable<VehicleDTO> vehicles = 
+                                _DB.Vehicles
+                                    .Select(x => new VehicleDTO() {
+                                        ID = x.ID,
+                                        Model = x.Model,
+                                        MakeYear = x.MakeYear,
+                                        ChassisNumber = x.ChassisNumber,
+                                        EngineCapacity = x.EngineCapacity
+                                    });
+
+            // Returning the VehicleDTOs' IQueryable
+            return vehicles;
         }
 
         #endregion
@@ -33,21 +44,29 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         #region Get (Specific) Vehicle (by ID)
 
         /// <summary>
-        /// API Method getting a specific Vehicle by the provided as input ID
+        /// API Method getting a specific Vehicle (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Vehicle))]
+        [ResponseType(typeof(VehicleDTO))]
         public async Task<IHttpActionResult> GetVehicle(int ID) {
 
             // Attempting to fetch the Vehicle
-            Vehicle vehicle = await _DB.Vehicles.FindAsync(ID);
+            VehicleDTO vehicleDTO = await _DB
+                                       .Vehicles
+                                        .Select(x => new VehicleDTO() {
+                                            ID = x.ID,
+                                            Model = x.Model,
+                                            MakeYear = x.MakeYear,
+                                            ChassisNumber = x.ChassisNumber,
+                                            EngineCapacity = x.EngineCapacity
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (vehicle == null) {
+            if (vehicleDTO == null) {
                 return NotFound();
             }
 
             // Return an OkResult, with the Vehicle
-            return Ok(vehicle);
+            return Ok(vehicleDTO);
         }
 
         #endregion

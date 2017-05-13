@@ -82,8 +82,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
                                         .Select(x => new AreaDTO() {
                                             ID = x.ID,
                                             Name = x.Name
-                                        }
-                                                ).FirstOrDefaultAsync(x => x.ID == ID);
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
             if (areaDTO == null) {
