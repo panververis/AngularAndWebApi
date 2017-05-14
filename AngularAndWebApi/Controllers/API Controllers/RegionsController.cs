@@ -42,9 +42,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Get (All) Regions and their related info
 
         /// <summary>
-        /// API method getting all the Regions and their "Parent" Dealer's (Areas) info (in DTOs) in an IQueryable,
+        /// API method getting all the Regions and their "Parent" Area's info (in DTOs) in an IQueryable,
         /// utilizing Web.Api2 Attributes Routing
         /// </summary>
+        [Route("api/regionsanddetails")]
         public IQueryable<RegionDTO> GetRegionsAndDetails() {
 
             // Getting all of the DbContext's Regions in a IQueryable of RegionDTOs
@@ -73,7 +74,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         public async Task<IHttpActionResult> GetRegion(int ID) {
 
             // Attempting to fetch the Region
-            // Attempting to fetch the Vehicle
             RegionDTO regionDTO = await _DB
                                        .Regions
                                         .Select(x => new RegionDTO() {

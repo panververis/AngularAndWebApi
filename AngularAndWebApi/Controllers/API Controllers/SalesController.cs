@@ -111,9 +111,9 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// <summary>
         /// API Method getting a specific Sale (in DTO) along with its Details (Vehicles / Staff / Dealer), by the provided as input ID
         /// </summary>
-        [Route("api/saleanddetails/{ID}")]
+        [Route("api/salesanddetails/{ID}")]
         [ResponseType(typeof(SaleDTO))]
-        public async Task<IHttpActionResult> GetSaleAndDetails(int ID) {
+        public async Task<IHttpActionResult> GetSalesAndDetails(int ID) {
 
             // Attempting to fetch the Sale
             SaleDTO saleDTO = await _DB

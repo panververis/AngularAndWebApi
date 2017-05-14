@@ -25,11 +25,11 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// </summary>
         public IQueryable<AreaDTO> GetAreas() {
 
-            // Getting all of the DbContext's Books in a IQueryable of BooksDTOs
-            IQueryable<AreaDTO> books = _DB.Areas.Select(x => new AreaDTO() { ID = x.ID, Name = x.Name });
+            // Getting all of the DbContext's Areas in a IQueryable of AreasDTOs
+            IQueryable<AreaDTO> areas = _DB.Areas.Select(x => new AreaDTO() { ID = x.ID, Name = x.Name });
 
-            // Returning the BooksDTOs' IQueryable
-            return books;
+            // Returning the AreasDTOs' IQueryable
+            return areas;
         }
 
         #endregion
@@ -44,8 +44,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         [Route("api/areasanddetails")]
         public IQueryable<AreaDTO> GetAreasAndDetails() {
 
-            // Getting all of the DbContext's Books in a IQueryable of BooksDTOs
-            IQueryable<AreaDTO> books = _DB
+            // Getting all of the DbContext's Areas in a IQueryable of AreaDTOs
+            IQueryable<AreaDTO> areas = _DB
                                         .Areas
                                             .Include(x => x.Regions)
                                                 .Select(x => new AreaDTO() 
@@ -55,14 +55,11 @@ namespace AngularAndWebApi.Controllers.API_Controllers
                                                         Regions = x.Regions
                                                                    .Select(y => new RegionDTO() {
                                                                        ID = y.ID,
-                                                                       Name = y.Name
-                                                                   }
-                                                                           )
-                                                                        .ToList()
+                                                                       Name = y.Name}).ToList()
                                                         });
 
-            // Returning the BooksDTOs' IQueryable
-            return books;
+            // Returning the AreaDTOs' IQueryable
+            return areas;
         }
 
         #endregion
@@ -95,15 +92,15 @@ namespace AngularAndWebApi.Controllers.API_Controllers
 
         #endregion
 
-        // GET: api/AreaAndDetails/5
+        // GET: api/AreasAndDetails/5
         #region Get (Specific) Area and its Details (Regions) (by ID)
 
         /// <summary>
         /// API Method getting a specific Area (in DTO) along with its Details (Regions), by the provided as input ID
         /// </summary>
-        [Route("api/areaanddetails/{ID}")]
+        [Route("api/areasanddetails/{ID}")]
         [ResponseType(typeof(AreaDTO))]
-        public async Task<IHttpActionResult> GetAreaAndDetails(int ID) {
+        public async Task<IHttpActionResult> GetAreasAndDetails(int ID) {
 
             // Attempting to fetch the Area
             AreaDTO areaDTO = await _DB

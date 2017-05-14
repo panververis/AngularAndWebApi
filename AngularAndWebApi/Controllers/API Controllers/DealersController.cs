@@ -48,7 +48,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         /// API method getting all the Dealers and their Details (Staff) (in DTOs) in an IQueryable,
         /// utilizing Web.Api2 Attributes Routing
         /// </summary>
-        [Route("api/dealerssanddetails")]
+        [Route("api/dealersanddetails")]
         public IQueryable<DealerDTO> GetDealersAndDetails() {
 
             // Getting all of the DbContext's Dealers in a IQueryable of DealerDTOs
@@ -239,7 +239,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         }
 
         #endregion
-        ///////////////////////////
 
         #region Overrides
 
