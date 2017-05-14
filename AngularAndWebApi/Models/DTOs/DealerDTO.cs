@@ -1,8 +1,20 @@
-﻿namespace AngularAndWebApi.Models.DTOs
+﻿using System.Collections.Generic;
+
+namespace AngularAndWebApi.Models.DTOs
 {
     public class DealerDTO
     {
-        public int      ID      { get; set; }
-        public string   Name    { get; set; }
+
+        ///// Fields
+        public int                  ID              { get; set; }
+        public string               Name            { get; set; }
+
+        ///// Detail Collections
+        public List<StaffDTO>       StaffMembers   { get; set; }
+
+        ///// Constructor
+        public DealerDTO() {
+            StaffMembers = new List<StaffDTO>();
+        }
     }
 }

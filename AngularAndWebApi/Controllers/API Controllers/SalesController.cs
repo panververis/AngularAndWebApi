@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers
 {
@@ -19,17 +20,58 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
         // GET: api/Sales
         #region  Get (All) Sales
 
         /// <summary>
-        /// API method getting all the Sales in an IQueryable
+        /// API method getting all the Sales (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Sale> GetSales() {
+        public IQueryable<SaleDTO> GetSales() {
+
+            // Getting all of the DbContext's Sales in a IQueryable of SalesDTOs
+            IQueryable<SaleDTO> sales = _DB.Sales
+                                            .Select(x => new SaleDTO() {
+                                                ID = x.ID,
+                                                SaleDate = x.SaleDate,
+                                                SaleValue = x.SaleValue});
 
             // Returning the DBContext's Sales
-            return _DB.Sales;
+            return sales;
+        }
+
+        #endregion
+
+        // GET: api/SalesAndDetails
+        #region Get (All) Sales and their Details
+
+        /// <summary>
+        /// API method getting all the Sales and their Details (Vehicles / Staff / Dealers) (in DTOs) in an IQueryable,
+        /// utilizing Web.Api2 Attributes Routing
+        /// </summary>
+        [Route("api/salesanddetails")]
+        public IQueryable<SaleDTO> GetSalesAndDetails() {
+
+            // Getting all of the DbContext's Sales in a IQueryable of BooksDTOs
+            IQueryable<SaleDTO> sales = _DB
+                                        .Sales
+                                            .Select(x => new SaleDTO() {
+                                                ID                      = x.ID,
+                                                SaleDate                = x.SaleDate,
+                                                SaleValue               = x.SaleValue,
+                                                VehicleID               = x.Vehicle.ID,
+                                                VehicleModel            = x.Vehicle.Model,
+                                                VehicleMakeYear         = x.Vehicle.MakeYear,
+                                                VehicleChassisNumber    = x.Vehicle.ChassisNumber,
+                                                VehicleEngineCapacity   = x.Vehicle.EngineCapacity,
+                                                StaffID                 = x.Staff.ID,
+                                                StaffFirstName          = x.Staff.FirstName,
+                                                StaffLastName           = x.Staff.LastName,
+                                                DealerID                = x.Dealer.ID,
+                                                DealerName              = x.Dealer.Name
+                                            });
+
+            // Returning the BooksDTOs' IQueryable
+            return sales;
         }
 
         #endregion
@@ -38,21 +80,68 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Get (Specific) Sale (by ID)
 
         /// <summary>
-        /// API Method getting a specific Sale by the provided as input ID
+        /// API Method getting a specific Sale (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Sale))]
+        [ResponseType(typeof(SaleDTO))]
         public async Task<IHttpActionResult> GetSale(int ID) {
 
-            // Attempting to fetch the Sale
-            Sale sale = await _DB.Sales.FindAsync(ID);
+            // Attempting to fetch the Area
+            SaleDTO saleDTO = await _DB
+                                       .Sales
+                                        .Select(x => new SaleDTO() {
+                                            ID          = x.ID,
+                                            SaleDate    = x.SaleDate,
+                                            SaleValue   = x.SaleValue
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (sale == null) {
+            if (saleDTO == null) {
                 return NotFound();
             }
 
             // Return an OkResult, with the Sale
-            return Ok(sale);
+            return Ok(saleDTO);
+        }
+
+        #endregion
+
+        // GET: api/SalesAndDetails/5
+        #region Get (Specific) Sales and its Details (Vehicles / Staff / Dealer) (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Sale (in DTO) along with its Details (Vehicles / Staff / Dealer), by the provided as input ID
+        /// </summary>
+        [Route("api/saleanddetails/{ID}")]
+        [ResponseType(typeof(SaleDTO))]
+        public async Task<IHttpActionResult> GetSaleAndDetails(int ID) {
+
+            // Attempting to fetch the Sale
+            SaleDTO saleDTO = await _DB
+                                       .Sales
+                                        .Select(x => new SaleDTO() {
+                                            ID                      = x.ID,
+                                            SaleDate                = x.SaleDate,
+                                            SaleValue               = x.SaleValue,
+                                            VehicleID               = x.Vehicle.ID,
+                                            VehicleModel            = x.Vehicle.Model,
+                                            VehicleMakeYear         = x.Vehicle.MakeYear,
+                                            VehicleChassisNumber    = x.Vehicle.ChassisNumber,
+                                            VehicleEngineCapacity   = x.Vehicle.EngineCapacity,
+                                            StaffID                 = x.Staff.ID,
+                                            StaffFirstName          = x.Staff.FirstName,
+                                            StaffLastName           = x.Staff.LastName,
+                                            DealerID                = x.Dealer.ID,
+                                            DealerName              = x.Dealer.Name
+
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+
+            // If not fetched, return a NotFoundResult
+            if (saleDTO == null) {
+                return NotFound();
+            }
+
+            // Return an OkResult, with the Sale
+            return Ok(saleDTO);
         }
 
         #endregion
@@ -156,7 +245,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         }
 
         #endregion
-        ///////////////////////////
 
         #region Overrides
 

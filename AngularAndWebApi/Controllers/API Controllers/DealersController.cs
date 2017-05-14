@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers
 {
@@ -19,17 +20,54 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
         // GET: api/Dealers
         #region Get (All) Dealers
 
         /// <summary>
-        /// API method getting all the Dealers in an IQueryable
+        /// API method getting all the Dealers (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Dealer> GetDealers() {
+        public IQueryable<DealerDTO> GetDealers() {
 
-            // Returning the DBContext's Areas
-            return _DB.Dealers;
+            // Getting all of the DbContext's Dealers in a IQueryable of DealerDTOs
+            IQueryable<DealerDTO> dealers = _DB.Dealers
+                                            .Select(x => new DealerDTO() {
+                                                ID      = x.ID,
+                                                Name    = x.Name
+                                            });
+
+            // Returning the DBContext's Dealers
+            return dealers;
+        }
+
+        #endregion
+
+        // GET: api/DealersAndDetails
+        #region Get (All) Sales and their Details
+
+        /// <summary>
+        /// API method getting all the Dealers and their Details (Staff) (in DTOs) in an IQueryable,
+        /// utilizing Web.Api2 Attributes Routing
+        /// </summary>
+        [Route("api/dealerssanddetails")]
+        public IQueryable<DealerDTO> GetDealersAndDetails() {
+
+            // Getting all of the DbContext's Dealers in a IQueryable of DealerDTOs
+            IQueryable<DealerDTO> dealers = _DB
+                                        .Dealers
+                                            .Select(x => new DealerDTO() {
+                                                ID = x.ID,
+                                                Name = x.Name,
+                                                StaffMembers = x.StaffMembers
+                                                                   .Select(y => new StaffDTO() {
+                                                                       ID = y.ID,
+                                                                       FirstName = y.FirstName,
+                                                                       LastName = y.LastName,
+                                                                       JobType = y.JobType
+                                                                   }).ToList()
+                                            });
+
+            // Returning the BooksDTOs' IQueryable
+            return dealers;
         }
 
         #endregion
@@ -38,22 +76,63 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Get (Specific) Dealer (by ID)
 
         /// <summary>
-        /// API Method getting a specific Dealer by the provided as input ID
+        /// API Method getting a specific Dealer (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Dealer))]
+        [ResponseType(typeof(DealerDTO))]
         public async Task<IHttpActionResult> GetDealer(int ID) {
 
-            // Attempting to fetch the Dealer
-            Dealer dealer = await _DB.Dealers.FindAsync(ID);
+            // Attempting to fetch the Area
+            DealerDTO dealerDTO = await _DB
+                                       .Dealers
+                                        .Select(x => new DealerDTO() {
+                                            ID = x.ID,
+                                            Name = x.Name
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (dealer == null)
+            if (dealerDTO == null)
             {
                 return NotFound();
             }
 
             // Return an OkResult, with the Dealer
-            return Ok(dealer);
+            return Ok(dealerDTO);
+        }
+
+        #endregion
+
+        // GET: api/DealersAndDetails/5
+        #region Get (Specific) Dealer and its Details (Staff Member) (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Dealer (in DTO) along with its Details (Staff Members), by the provided as input ID
+        /// </summary>
+        [Route("api/dealersanddetails/{ID}")]
+        [ResponseType(typeof(DealerDTO))]
+        public async Task<IHttpActionResult> GetDealersAndDetails(int ID) {
+
+            // Attempting to fetch the Dealer
+            DealerDTO dealerDTO = await _DB
+                                       .Dealers
+                                            .Select(x => new DealerDTO() {
+                                                ID = x.ID,
+                                                Name = x.Name,
+                                                StaffMembers = x.StaffMembers
+                                                                       .Select(y => new StaffDTO() {
+                                                                           ID = y.ID,
+                                                                           FirstName = y.FirstName,
+                                                                           LastName = y.LastName,
+                                                                           JobType = y.JobType
+                                                                       }).ToList()
+                                            }).FirstOrDefaultAsync(x => x.ID == ID);
+
+            // If not fetched, return a NotFoundResult
+            if (dealerDTO == null) {
+                return NotFound();
+            }
+
+            // Return an OkResult, with the Dealer
+            return Ok(dealerDTO);
         }
 
         #endregion

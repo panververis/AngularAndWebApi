@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers
 {
@@ -15,17 +16,49 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
         // GET: api/Regions
         #region  Get (All) Regions
 
         /// <summary>
-        /// API method getting all the Regions in an IQueryable
+        /// API method getting all the Regions (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Region> GetRegions() {
+        public IQueryable<RegionDTO> GetRegions() {
 
-            // Returning the DBContext's Regions
-            return _DB.Regions;
+            // Getting all of the DbContext's Regions in a IQueryable of RegionDTOs
+            IQueryable<RegionDTO> regions =
+                                _DB.Regions
+                                    .Select(x => new RegionDTO() {
+                                        ID      = x.ID,
+                                        Name    = x.Name
+                                    });
+
+            // Returning the RegionDTOs' IQueryable
+            return regions;
+        }
+
+        #endregion
+
+        // GET: api/RegionsAndDetails
+        #region Get (All) Regions and their related info
+
+        /// <summary>
+        /// API method getting all the Regions and their "Parent" Dealer's (Areas) info (in DTOs) in an IQueryable,
+        /// utilizing Web.Api2 Attributes Routing
+        /// </summary>
+        public IQueryable<RegionDTO> GetRegionsAndDetails() {
+
+            // Getting all of the DbContext's Regions in a IQueryable of RegionDTOs
+            IQueryable<RegionDTO> regions = _DB
+                                        .Regions
+                                            .Select(x => new RegionDTO() {
+                                                ID = x.ID,
+                                                Name = x.Name,
+                                                AreaID = x.Area.ID,
+                                                AreaName = x.Area.Name
+                                            });
+
+            // Returning the RegionDTOs' IQueryable
+            return regions;
         }
 
         #endregion
@@ -34,21 +67,58 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         #region Get (Specific) Region (by ID)
 
         /// <summary>
-        /// API Method getting a specific Region by the provided as input ID
+        /// API Method getting a specific Region (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Region))]
+        [ResponseType(typeof(RegionDTO))]
         public async Task<IHttpActionResult> GetRegion(int ID) {
 
             // Attempting to fetch the Region
-            Region region = await _DB.Regions.FindAsync(ID);
+            // Attempting to fetch the Vehicle
+            RegionDTO regionDTO = await _DB
+                                       .Regions
+                                        .Select(x => new RegionDTO() {
+                                            ID = x.ID,
+                                            Name = x.Name
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (region == null) {
+            if (regionDTO == null) {
                 return NotFound();
             }
 
             // Return an OkResult, with the Region
-            return Ok(region);
+            return Ok(regionDTO);
+        }
+
+        #endregion
+
+        // GET: api/RegionsAndDetails/5
+        #region Get (Specific) Area and its Details (Regions) (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Region (in DTO) along with its related info (Area), by the provided as input ID
+        /// </summary>
+        [Route("api/regionsanddetails/{ID}")]
+        [ResponseType(typeof(RegionDTO))]
+        public async Task<IHttpActionResult> GetRegionAndDetails(int ID) {
+
+            // Attempting to fetch the Region
+            RegionDTO regionDTO = await _DB
+                                       .Regions
+                                        .Select(x => new RegionDTO() {
+                                            ID = x.ID,
+                                            Name = x.Name,
+                                            AreaID = x.Area.ID,
+                                            AreaName = x.Area.Name
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+
+            // If not fetched, return a NotFoundResult
+            if (regionDTO == null) {
+                return NotFound();
+            }
+
+            // Return an OkResult, with the Region
+            return Ok(regionDTO);
         }
 
         #endregion
@@ -153,7 +223,6 @@ namespace AngularAndWebApi.Controllers.API_Controllers
         }
 
         #endregion
-        ///////////////////////////
 
         #region Overrides
 

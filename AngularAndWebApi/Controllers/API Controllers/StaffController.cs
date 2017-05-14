@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
+using AngularAndWebApi.Models.DTOs;
 
 namespace AngularAndWebApi.Controllers.API_Controllers {
 
@@ -14,17 +15,59 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         // Initializing the DBContext
         private AngularAndWebApiContext _DB = new AngularAndWebApiContext();
 
-        /////////////////////////// API Exposed Methods
         // GET: api/Staff
         #region  Get (All) Staff
 
         /// <summary>
-        /// API method getting all the Staff in an IQueryable
+        /// API method getting all the Staff (in DTOs) in an IQueryable
         /// </summary>
-        public IQueryable<Staff> GetAllStaff() {
+        public IQueryable<StaffDTO> GetAllStaff() {
 
-            // Returning the DBContext's Staff
-            return _DB.Staffs;
+            // Getting all of the DbContext's Staff in a IQueryable of StaffDTOs
+            IQueryable<StaffDTO> staff = _DB.Staffs
+                                                .Select(x => new StaffDTO() {
+                                                                ID = x.ID,
+                                                                FirstName = x.FirstName,
+                                                                LastName = x.LastName,
+                                                                JobType = x.JobType
+                                                });
+
+            // Returning the StaffDTOs' IQueryable
+            return staff;
+        }
+
+        #endregion
+
+        // GET: api/StaffAndDetails
+        #region  Get (All) Staff and their Details
+
+        /// <summary>
+        /// API method getting all the Staff and their Details (Sales) and their "Parent" Dealer's info (in DTOs) in an IQueryable,
+        /// utilizing Web.Api2 Attributes Routing
+        /// </summary>
+        [Route("api/staffanddetails")]
+        public IQueryable<StaffDTO> GetStaffAndDetails() {
+
+            // Getting all of the DbContext's Staff in a IQueryable of StaffDTOs
+            IQueryable<StaffDTO> staff = _DB
+                                        .Staffs
+                                            .Include(x => x.Sales)
+                                                .Select(x => new StaffDTO() {
+                                                    ID              = x.ID,
+                                                    FirstName       = x.FirstName,
+                                                    LastName        = x.LastName,
+                                                    JobType         = x.JobType,
+                                                    DealerID        = x.Dealer.ID,
+                                                    DealerName      = x.Dealer.Name,
+                                                    Sales           = x.Sales.Select(y => new SaleDTO() {
+                                                                                            ID = y.ID,
+                                                                                            SaleDate = y.SaleDate,
+                                                                                            SaleValue = y.SaleValue})
+                                                                                                .ToList()
+                                                });
+
+            // Returning the StaffDTOs' IQueryable
+            return staff;
         }
 
         #endregion
@@ -33,21 +76,64 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         #region Get (Specific) Staff member (by ID)
 
         /// <summary>
-        /// API Method getting a specific Staff member by the provided as input ID
+        /// API Method getting a specific Staff member (in DTO) by the provided as input ID
         /// </summary>
-        [ResponseType(typeof(Staff))]
+        [ResponseType(typeof(StaffDTO))]
         public async Task<IHttpActionResult> GetStaff(int ID) {
 
             // Attempting to fetch the Staff member
-            Staff staff = await _DB.Staffs.FindAsync(ID);
+            StaffDTO staffDTO = await _DB
+                                       .Staffs
+                                        .Select(x => new StaffDTO() {
+                                            ID          = x.ID,
+                                            FirstName   = x.FirstName,
+                                            LastName    = x.LastName
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
 
             // If not fetched, return a NotFoundResult
-            if (staff == null) {
+            if (staffDTO == null) {
                 return NotFound();
             }
 
             // Return an OkResult, with the Staff member
-            return Ok(staff);
+            return Ok(staffDTO);
+        }
+
+        #endregion
+
+        // GET: api/StaffAndDetails/5
+        #region Get (Specific) Staff member and its Details (Sales) (by ID)
+
+        /// <summary>
+        /// API Method getting a specific Staff member (in DTO) along with its Details (Sales), by the provided as input ID
+        /// </summary>
+        [Route("api/staffanddetails/{ID}")]
+        [ResponseType(typeof(StaffDTO))]
+        public async Task<IHttpActionResult> GetStaffAndDetails(int ID) {
+
+            // Attempting to fetch the Staff member
+            StaffDTO staffDTO = await _DB
+                                       .Staffs
+                                        .Select(x => new StaffDTO() {
+                                            ID = x.ID,
+                                            FirstName = x.FirstName,
+                                            LastName = x.LastName,
+                                            JobType = x.JobType,
+                                            Sales = x.Sales
+                                                         .Select(y => new SaleDTO() {
+                                                             ID = y.ID,
+                                                             SaleDate = y.SaleDate,
+                                                             SaleValue = y.SaleValue
+                                                         }).ToList()
+                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+
+            // If not fetched, return a NotFoundResult
+            if (staffDTO == null) {
+                return NotFound();
+            }
+
+            // Return an OkResult, with the StaffDTO
+            return Ok(staffDTO);
         }
 
         #endregion
