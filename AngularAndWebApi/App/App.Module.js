@@ -1,6 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('app', []);
+    // This is the app's main module
+    angular.module('app', ['app.vehicles']);
 
 })();
