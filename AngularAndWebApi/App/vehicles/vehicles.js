@@ -5,13 +5,13 @@
         .module('app.vehicles')
         .controller('Vehicles', Vehicles);
 
-    Attendees.$inject = [];
+    Vehicles.$inject = [];
 
     function Vehicles() {
 
         var vm = this;
-        vm.title = 'vehicles title';
 
+        vm.title = 'vehicles title';
 
         activate();
 
