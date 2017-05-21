@@ -14,6 +14,7 @@
         var vm              = this;
         vm.vehiclesData     = [];
         vm.vehiclesCount    = 0;
+        vm.title            = 'Vehicles List View';
 
         // Invoking the Controller's activation
         activate();
