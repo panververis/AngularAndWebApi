@@ -213,6 +213,7 @@
   <ItemGroup>
     <Content Include="app\app.module.js" />
     <Content Include="app\vehicles\vehicles.js" />
+    <Content Include="app\vehicles\vehiclesService.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

@@ -5,28 +5,26 @@
         .module('app.vehicles')
         .controller('Vehicles', Vehicles);
 
-    // injecting the dependencies
-    Vehicles.$inject = ['$http'];
+    // Injecting the dependencies
+    Vehicles.$inject = ['$http', 'vehiclesService'];
 
     // Vehicles Controller
-    function Vehicles($http) {
+    function Vehicles($http, vehiclesService) {
 
-        // getting a reference to the controller
-        var vm = this;
+        var vm              = this;
+        var vehiclesData    = [];
+        var vehiclesCount   = 0;
 
-        // the vehicles data that are to be displayed in the vehicles ("List") View
-        var vehiclesData = [];
-
-        // invoking the Controller's activation
+        // Invoking the Controller's activation
         activate();
 
+        // Function activating the Controller
         function activate() {
-            var response = $http.get('/api/Vehicles')
-                .then(function (response) {
-                    vehiclesData = response.data;
-                    vm.title = 'Vehicles';
-                    vm.vehiclesCount = vehiclesData.length;
-                });
+            var response        = vehiclesService.getVehicles();
+            if (response){
+                vehiclesData    = response.data;
+                vehiclesCount   = response.count;
+            }
         }
 
     }
