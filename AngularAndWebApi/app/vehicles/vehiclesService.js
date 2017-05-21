@@ -1,40 +1,36 @@
-﻿angular
-    .module('app.vehicles')
-    .factory('vehiclesService', vehiclesService);
+﻿(function () {
+    'use strict';
 
-// Injecting the dependencies
-vehiclesService.$inject = ['$http', '$log'];
+    angular
+        .module('app.vehicles')
+        .factory('vehiclesService', vehiclesService);
 
-// Vehicles data service
-function vehiclesService($http, $log) {
-    return {
-        getVehicles: getVehicles
-    };
+    // Injecting the dependencies
+    vehiclesService.$inject = ['$http', '$log'];
 
-    function getVehicles() {
-        return $http.get('/api/Vehicles')
-            .then(getVehiclesComplete)
-            .catch(getVehiclesFailed);
+    // Vehicles data service
+    function vehiclesService($http, $log) {
 
-        // Function handling a successful return
-        function getAvengersComplete(response) {
+        var service = {
+            getVehicles: getVehicles
+        };
 
-            // Grabbing the response's data in local variables
-            var vehiclesData        = response.data.results;
-            var vehiclesCount       = vehiclesData.length;
+        return service;
 
-            // Initializing the "vehicles response" object
-            var vehiclesResponse    = [];
-            vehiclesResponse.data   = vehiclesData;
-            vehiclesResponse.count = vehiclesCount;
+        function getVehicles() {
+            return $http.get('/api/Vehicles')
+                .then(getVehiclesComplete)
+                .catch(getVehiclesFailed);
 
-            // Lastly returning the above prepared "vehicles response object"
-            return response.data.results;
-        }
+            // Function handling a successful return
+            function getVehiclesComplete(response) {
+                return response.data;
+            }
 
-        // Function handling an unsuccessful return
-        function getVehiclesFailed(error) {
-            $log.error('XHR Failed for getVehicles.' + error.data);
+            // Function handling an unsuccessful return
+            function getVehiclesFailed(error) {
+                $log.error('XHR Failed for getVehicles.' + error.data);
+            }
         }
     }
-}
+})();

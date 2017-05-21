@@ -6,26 +6,31 @@
         .controller('Vehicles', Vehicles);
 
     // Injecting the dependencies
-    Vehicles.$inject = ['$http', 'vehiclesService'];
+    Vehicles.$inject = ['vehiclesService'];
 
     // Vehicles Controller
-    function Vehicles($http, vehiclesService) {
+    function Vehicles(vehiclesService) {
 
         var vm              = this;
-        var vehiclesData    = [];
-        var vehiclesCount   = 0;
+        vm.vehiclesData     = [];
+        vm.vehiclesCount    = 0;
 
         // Invoking the Controller's activation
         activate();
 
         // Function activating the Controller
         function activate() {
-            var response        = vehiclesService.getVehicles();
-            if (response){
-                vehiclesData    = response.data;
-                vehiclesCount   = response.count;
-            }
+            return getVehicles();
         }
 
+        // Function handling the "vehicles service"'s "get vehicles" call
+        function getVehicles() {
+            return vehiclesService.getVehicles()
+                .then(function (data) {
+                    vm.vehiclesData = data;
+                    vm.vehiclesCount = vm.vehiclesData.length;
+                    return vm.vehiclesData;
+                });
+        }
     }
 })();
