@@ -5,8 +5,10 @@
         .module('app.vehicles')
         .controller('Vehicles', Vehicles);
 
+    // injecting the dependencies
     Vehicles.$inject = ['$http'];
 
+    // Vehicles Controller
     function Vehicles($http) {
 
         // getting a reference to the controller
@@ -19,18 +21,12 @@
         activate();
 
         function activate() {
-
             var response = $http.get('/api/Vehicles')
                 .then(function (response) {
                     vehiclesData = response.data;
+                    vm.title = 'Vehicles';
+                    vm.vehiclesCount = vehiclesData.length;
                 });
-
-            if (vehiclesData){
-                // test assignment of a variable for checking whether the controller gets invoked properly
-                vm.title = 'Vehicles';
-
-                vm.vehiclesCount = vehiclesData.length;
-            }
         }
 
     }
