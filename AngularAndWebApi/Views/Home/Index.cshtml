@@ -1,10 +1,10 @@
 ﻿<div id="index-view" ng-app="app">
     <div ng-controller="Vehicles as vehicles">
         {{ vehicles.title         }}
-
-        <h1 ng-repeat="vehicle in vehicles.vehiclesData"> {{ vehicle.Model }} </h1>
-
-        {{ vehicles.vehiclesCount }}
+        <p ng-repeat="vehicle in vehicles.vehiclesData"> 
+            {{ vehicle.Model }}
+            {{ vehicle.EngineCapacityDisplayText }}
+        </p>
     </div>
 </div>
 
