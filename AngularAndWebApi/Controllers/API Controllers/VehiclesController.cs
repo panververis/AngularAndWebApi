@@ -27,11 +27,11 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             IQueryable<VehicleDTO> vehicles = 
                                 _DB.Vehicles
                                     .Select(x => new VehicleDTO() {
-                                        ID = x.ID,
-                                        Model = x.Model,
-                                        MakeYear = x.MakeYear,
-                                        ChassisNumber = x.ChassisNumber,
-                                        EngineCapacity = x.EngineCapacity
+                                        id = x.ID,
+                                        model = x.Model,
+                                        makeYear = x.MakeYear,
+                                        chassisNumber = x.ChassisNumber,
+                                        engineCapacity = x.EngineCapacity
                                     });
 
             // Returning the VehicleDTOs' IQueryable
@@ -53,12 +53,12 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             VehicleDTO vehicleDTO = await _DB
                                        .Vehicles
                                         .Select(x => new VehicleDTO() {
-                                            ID = x.ID,
-                                            Model = x.Model,
-                                            MakeYear = x.MakeYear,
-                                            ChassisNumber = x.ChassisNumber,
-                                            EngineCapacity = x.EngineCapacity
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id = x.ID,
+                                            model = x.Model,
+                                            makeYear = x.MakeYear,
+                                            chassisNumber = x.ChassisNumber,
+                                            engineCapacity = x.EngineCapacity
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (vehicleDTO == null) {
