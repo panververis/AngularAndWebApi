@@ -1,13 +1,23 @@
 ﻿<div id="index-view" ng-app="app">
     <div ng-controller="Vehicles as vehicles">
         <h1>{{ vehicles.title }}</h1>
+        <p style="padding-bottom:12px;"></p>
         <table>
-
+            <tr>
+                <td>Model</td>
+                <td>Make Year</td>
+                <td>Engine Spec</td>
+                <td>Chassis Number</td>
+                <td></td>
+                <td></td>
+            </tr>
             <tr ng-repeat="vehicle in vehicles.vehiclesData">
-                <td>{{vehicle.model}}</td>
-                <td>{{vehicle.makeYear}} </td>
-                <td>{{vehicle.engineCapacityDisplayText}}</td>
-                <td>{{vehicle.chassisNumber}}</td>
+                <td>{{vehicle.model}}                       </td>
+                <td>{{vehicle.makeYear}}                    </td>
+                <td>{{vehicle.engineCapacityDisplayText}}   </td>
+                <td>{{vehicle.chassisNumber}}               </td>
+                <td><i class="fa fa-trash"></i>             </td>
+                <td><i class="fa fa-edit"></i>              </td>
             </tr>
         </table>
     </div>
@@ -20,4 +30,4 @@
 <!--blocks-->
 <script src="~/app/vehicles/vehicles.module.js"></script>
 <script src="~/app/vehicles/vehiclesService.js"></script>
-<script src="~/app/vehicles/vehicles.js"></script>
+<script src="~/app/vehicles/vehicles.js">       </script>
