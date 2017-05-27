@@ -5,15 +5,15 @@ namespace AngularAndWebApi.Models.DTOs
     public class AreaDTO {
 
         //// Fields
-        public int              ID { get; set; }
-        public string           Name { get; set; }
+        public int              id      { get; set; }
+        public string           name    { get; set; }
 
         //// Detail colections
-        public List<RegionDTO>  Regions { get; set; }
+        public List<RegionDTO>  regions { get; set; }
 
         //// Constructor
         public AreaDTO() {
-            Regions = new List<RegionDTO>();
+            regions = new List<RegionDTO>();
         }
 
     }

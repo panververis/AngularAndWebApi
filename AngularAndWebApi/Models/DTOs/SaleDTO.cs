@@ -4,21 +4,21 @@ namespace AngularAndWebApi.Models.DTOs
 {
     public class SaleDTO
     {
-        public int      ID                      { get; set; }
-        public DateTime SaleDate                { get; set; }
-        public decimal  SaleValue               { get; set; }
+        public int      id                      { get; set; }
+        public DateTime saleDate                { get; set; }
+        public decimal  saleValue               { get; set; }
 
-        public int      VehicleID               { get; set; }
-        public string   VehicleModel            { get; set; }
-        public Int16    VehicleMakeYear         { get; set; }
-        public string   VehicleChassisNumber    { get; set; }
-        public Int16    VehicleEngineCapacity   { get; set; }
+        public int      vehicleID               { get; set; }
+        public string   vehicleModel            { get; set; }
+        public Int16    vehicleMakeYear         { get; set; }
+        public string   vehicleChassisNumber    { get; set; }
+        public Int16    vehicleEngineCapacity   { get; set; }
 
-        public int      StaffID                 { get; set; }
-        public string   StaffFirstName          { get; set; }
-        public string   StaffLastName           { get; set; }
+        public int      staffID                 { get; set; }
+        public string   staffFirstName          { get; set; }
+        public string   staffLastName           { get; set; }
 
-        public int      DealerID                { get; set; }
-        public string   DealerName              { get; set; }
+        public int      dealerID                { get; set; }
+        public string   dealerName              { get; set; }
     }
 }

@@ -6,15 +6,15 @@ namespace AngularAndWebApi.Models.DTOs
     {
 
         ///// Fields
-        public int                  ID              { get; set; }
-        public string               Name            { get; set; }
+        public int                  id              { get; set; }
+        public string               name            { get; set; }
 
         ///// Detail Collections
-        public List<StaffDTO>       StaffMembers   { get; set; }
+        public List<StaffDTO>       staffMembers   { get; set; }
 
         ///// Constructor
         public DealerDTO() {
-            StaffMembers = new List<StaffDTO>();
+            staffMembers = new List<StaffDTO>();
         }
     }
 }

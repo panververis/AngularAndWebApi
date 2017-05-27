@@ -26,10 +26,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             // Getting all of the DbContext's Staff in a IQueryable of StaffDTOs
             IQueryable<StaffDTO> staff = _DB.Staffs
                                                 .Select(x => new StaffDTO() {
-                                                                ID = x.ID,
-                                                                FirstName = x.FirstName,
-                                                                LastName = x.LastName,
-                                                                JobType = x.JobType
+                                                                id = x.ID,
+                                                                firstName = x.FirstName,
+                                                                lastName = x.LastName,
+                                                                jobType = x.JobType
                                                 });
 
             // Returning the StaffDTOs' IQueryable
@@ -53,16 +53,16 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
                                         .Staffs
                                             .Include(x => x.Sales)
                                                 .Select(x => new StaffDTO() {
-                                                    ID              = x.ID,
-                                                    FirstName       = x.FirstName,
-                                                    LastName        = x.LastName,
-                                                    JobType         = x.JobType,
-                                                    DealerID        = x.Dealer.ID,
-                                                    DealerName      = x.Dealer.Name,
-                                                    Sales           = x.Sales.Select(y => new SaleDTO() {
-                                                                                            ID = y.ID,
-                                                                                            SaleDate = y.SaleDate,
-                                                                                            SaleValue = y.SaleValue})
+                                                    id              = x.ID,
+                                                    firstName       = x.FirstName,
+                                                    lastName        = x.LastName,
+                                                    jobType         = x.JobType,
+                                                    dealerID        = x.Dealer.ID,
+                                                    dealerName      = x.Dealer.Name,
+                                                    sales           = x.Sales.Select(y => new SaleDTO() {
+                                                                                            id = y.ID,
+                                                                                            saleDate = y.SaleDate,
+                                                                                            saleValue = y.SaleValue})
                                                                                                 .ToList()
                                                 });
 
@@ -85,10 +85,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             StaffDTO staffDTO = await _DB
                                        .Staffs
                                         .Select(x => new StaffDTO() {
-                                            ID          = x.ID,
-                                            FirstName   = x.FirstName,
-                                            LastName    = x.LastName
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id          = x.ID,
+                                            firstName   = x.FirstName,
+                                            lastName    = x.LastName
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (staffDTO == null) {
@@ -115,17 +115,17 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             StaffDTO staffDTO = await _DB
                                        .Staffs
                                         .Select(x => new StaffDTO() {
-                                            ID = x.ID,
-                                            FirstName = x.FirstName,
-                                            LastName = x.LastName,
-                                            JobType = x.JobType,
-                                            Sales = x.Sales
+                                            id = x.ID,
+                                            firstName = x.FirstName,
+                                            lastName = x.LastName,
+                                            jobType = x.JobType,
+                                            sales = x.Sales
                                                          .Select(y => new SaleDTO() {
-                                                             ID = y.ID,
-                                                             SaleDate = y.SaleDate,
-                                                             SaleValue = y.SaleValue
+                                                             id = y.ID,
+                                                             saleDate = y.SaleDate,
+                                                             saleValue = y.SaleValue
                                                          }).ToList()
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (staffDTO == null) {

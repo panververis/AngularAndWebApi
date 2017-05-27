@@ -28,8 +28,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             IQueryable<RegionDTO> regions =
                                 _DB.Regions
                                     .Select(x => new RegionDTO() {
-                                        ID      = x.ID,
-                                        Name    = x.Name
+                                        id      = x.ID,
+                                        name    = x.Name
                                     });
 
             // Returning the RegionDTOs' IQueryable
@@ -52,10 +52,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             IQueryable<RegionDTO> regions = _DB
                                         .Regions
                                             .Select(x => new RegionDTO() {
-                                                ID = x.ID,
-                                                Name = x.Name,
-                                                AreaID = x.Area.ID,
-                                                AreaName = x.Area.Name
+                                                id = x.ID,
+                                                name = x.Name,
+                                                areaID = x.Area.ID,
+                                                areaName = x.Area.Name
                                             });
 
             // Returning the RegionDTOs' IQueryable
@@ -77,9 +77,9 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             RegionDTO regionDTO = await _DB
                                        .Regions
                                         .Select(x => new RegionDTO() {
-                                            ID = x.ID,
-                                            Name = x.Name
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id = x.ID,
+                                            name = x.Name
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (regionDTO == null) {
@@ -106,11 +106,11 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             RegionDTO regionDTO = await _DB
                                        .Regions
                                         .Select(x => new RegionDTO() {
-                                            ID = x.ID,
-                                            Name = x.Name,
-                                            AreaID = x.Area.ID,
-                                            AreaName = x.Area.Name
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id = x.ID,
+                                            name = x.Name,
+                                            areaID = x.Area.ID,
+                                            areaName = x.Area.Name
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (regionDTO == null) {

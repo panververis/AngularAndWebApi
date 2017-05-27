@@ -2,9 +2,9 @@
 {
     public class RegionDTO
     {
-        public int      ID          { get; set; }
-        public string   Name        { get; set; }
-        public int      AreaID      { get; set; }
-        public string   AreaName    { get; set; }
+        public int      id          { get; set; }
+        public string   name        { get; set; }
+        public int      areaID      { get; set; }
+        public string   areaName    { get; set; }
     }
 }

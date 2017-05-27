@@ -31,8 +31,8 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             // Getting all of the DbContext's Dealers in a IQueryable of DealerDTOs
             IQueryable<DealerDTO> dealers = _DB.Dealers
                                             .Select(x => new DealerDTO() {
-                                                ID      = x.ID,
-                                                Name    = x.Name
+                                                id      = x.ID,
+                                                name    = x.Name
                                             });
 
             // Returning the DBContext's Dealers
@@ -55,14 +55,14 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             IQueryable<DealerDTO> dealers = _DB
                                         .Dealers
                                             .Select(x => new DealerDTO() {
-                                                ID = x.ID,
-                                                Name = x.Name,
-                                                StaffMembers = x.StaffMembers
+                                                id = x.ID,
+                                                name = x.Name,
+                                                staffMembers = x.StaffMembers
                                                                    .Select(y => new StaffDTO() {
-                                                                       ID = y.ID,
-                                                                       FirstName = y.FirstName,
-                                                                       LastName = y.LastName,
-                                                                       JobType = y.JobType
+                                                                       id = y.ID,
+                                                                       firstName = y.FirstName,
+                                                                       lastName = y.LastName,
+                                                                       jobType = y.JobType
                                                                    }).ToList()
                                             });
 
@@ -85,9 +85,9 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             DealerDTO dealerDTO = await _DB
                                        .Dealers
                                         .Select(x => new DealerDTO() {
-                                            ID = x.ID,
-                                            Name = x.Name
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id = x.ID,
+                                            name = x.Name
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (dealerDTO == null)
@@ -115,16 +115,16 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             DealerDTO dealerDTO = await _DB
                                        .Dealers
                                             .Select(x => new DealerDTO() {
-                                                ID = x.ID,
-                                                Name = x.Name,
-                                                StaffMembers = x.StaffMembers
+                                                id = x.ID,
+                                                name = x.Name,
+                                                staffMembers = x.StaffMembers
                                                                        .Select(y => new StaffDTO() {
-                                                                           ID = y.ID,
-                                                                           FirstName = y.FirstName,
-                                                                           LastName = y.LastName,
-                                                                           JobType = y.JobType
+                                                                           id = y.ID,
+                                                                           firstName = y.FirstName,
+                                                                           lastName = y.LastName,
+                                                                           jobType = y.JobType
                                                                        }).ToList()
-                                            }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (dealerDTO == null) {

@@ -31,9 +31,9 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             // Getting all of the DbContext's Sales in a IQueryable of SalesDTOs
             IQueryable<SaleDTO> sales = _DB.Sales
                                             .Select(x => new SaleDTO() {
-                                                ID = x.ID,
-                                                SaleDate = x.SaleDate,
-                                                SaleValue = x.SaleValue});
+                                                id = x.ID,
+                                                saleDate = x.SaleDate,
+                                                saleValue = x.SaleValue});
 
             // Returning the DBContext's Sales
             return sales;
@@ -55,19 +55,19 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             IQueryable<SaleDTO> sales = _DB
                                         .Sales
                                             .Select(x => new SaleDTO() {
-                                                ID                      = x.ID,
-                                                SaleDate                = x.SaleDate,
-                                                SaleValue               = x.SaleValue,
-                                                VehicleID               = x.Vehicle.ID,
-                                                VehicleModel            = x.Vehicle.Model,
-                                                VehicleMakeYear         = x.Vehicle.MakeYear,
-                                                VehicleChassisNumber    = x.Vehicle.ChassisNumber,
-                                                VehicleEngineCapacity   = x.Vehicle.EngineCapacity,
-                                                StaffID                 = x.Staff.ID,
-                                                StaffFirstName          = x.Staff.FirstName,
-                                                StaffLastName           = x.Staff.LastName,
-                                                DealerID                = x.Dealer.ID,
-                                                DealerName              = x.Dealer.Name
+                                                id                      = x.ID,
+                                                saleDate                = x.SaleDate,
+                                                saleValue               = x.SaleValue,
+                                                vehicleID               = x.Vehicle.ID,
+                                                vehicleModel            = x.Vehicle.Model,
+                                                vehicleMakeYear         = x.Vehicle.MakeYear,
+                                                vehicleChassisNumber    = x.Vehicle.ChassisNumber,
+                                                vehicleEngineCapacity   = x.Vehicle.EngineCapacity,
+                                                staffID                 = x.Staff.ID,
+                                                staffFirstName          = x.Staff.FirstName,
+                                                staffLastName           = x.Staff.LastName,
+                                                dealerID                = x.Dealer.ID,
+                                                dealerName              = x.Dealer.Name
                                             });
 
             // Returning the BooksDTOs' IQueryable
@@ -89,10 +89,10 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             SaleDTO saleDTO = await _DB
                                        .Sales
                                         .Select(x => new SaleDTO() {
-                                            ID          = x.ID,
-                                            SaleDate    = x.SaleDate,
-                                            SaleValue   = x.SaleValue
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                            id          = x.ID,
+                                            saleDate    = x.SaleDate,
+                                            saleValue   = x.SaleValue
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (saleDTO == null) {
@@ -119,21 +119,21 @@ namespace AngularAndWebApi.Controllers.API_Controllers
             SaleDTO saleDTO = await _DB
                                        .Sales
                                         .Select(x => new SaleDTO() {
-                                            ID                      = x.ID,
-                                            SaleDate                = x.SaleDate,
-                                            SaleValue               = x.SaleValue,
-                                            VehicleID               = x.Vehicle.ID,
-                                            VehicleModel            = x.Vehicle.Model,
-                                            VehicleMakeYear         = x.Vehicle.MakeYear,
-                                            VehicleChassisNumber    = x.Vehicle.ChassisNumber,
-                                            VehicleEngineCapacity   = x.Vehicle.EngineCapacity,
-                                            StaffID                 = x.Staff.ID,
-                                            StaffFirstName          = x.Staff.FirstName,
-                                            StaffLastName           = x.Staff.LastName,
-                                            DealerID                = x.Dealer.ID,
-                                            DealerName              = x.Dealer.Name
+                                            id                      = x.ID,
+                                            saleDate                = x.SaleDate,
+                                            saleValue               = x.SaleValue,
+                                            vehicleID               = x.Vehicle.ID,
+                                            vehicleModel            = x.Vehicle.Model,
+                                            vehicleMakeYear         = x.Vehicle.MakeYear,
+                                            vehicleChassisNumber    = x.Vehicle.ChassisNumber,
+                                            vehicleEngineCapacity   = x.Vehicle.EngineCapacity,
+                                            staffID                 = x.Staff.ID,
+                                            staffFirstName          = x.Staff.FirstName,
+                                            staffLastName           = x.Staff.LastName,
+                                            dealerID                = x.Dealer.ID,
+                                            dealerName              = x.Dealer.Name
 
-                                        }).FirstOrDefaultAsync(x => x.ID == ID);
+                                        }).FirstOrDefaultAsync(x => x.id == ID);
 
             // If not fetched, return a NotFoundResult
             if (saleDTO == null) {
