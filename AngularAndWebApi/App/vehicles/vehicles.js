@@ -15,6 +15,8 @@
         vm.vehiclesData     = [];
         vm.vehiclesCount    = 0;
         vm.title            = 'Vehicles List View';
+        vm.filterText       = "";
+        vm.clearFilterText  = clearFilterText;
 
         // Invoking the Controller's activation
         activate();
@@ -32,6 +34,11 @@
                     vm.vehiclesCount = vm.vehiclesData.length;
                     return vm.vehiclesData;
                 });
+        }
+
+        // Function clearing the filter text value
+        function clearFilterText() {
+            vm.filterText = "";
         }
     }
 })();

@@ -1,17 +1,35 @@
 ﻿<div id="index-view" ng-app="app">
     <div ng-controller="Vehicles as vehicles">
+
+        <!-- Title -->
         <h1>{{ vehicles.title }}</h1>
-        <p style="padding-bottom:12px;"></p>
+
+        <!-- "Add new" button -->
+        <div class="verticalEmptySpaceBig">
+            <button><i class=" fa fa-plus-circle"></i> Add new vehicle </button>
+        </div>
+
+        <!-- Filter control -->
+        <div class="verticalEmptySpaceBig">
+            <button ng-click="vehicles.clearFilterText()"><i class="fa fa-filter"></i> Clear </button>
+            <input type="text" ng-model="vehicles.filterText"/>
+        </div>
+
+        <div class="verticalEmptySpaceSmall"></div>
+
+        <!-- List (Table) View -->
         <table>
-            <tr>
-                <td>Model</td>
-                <td>Make Year</td>
-                <td>Engine Spec</td>
-                <td>Chassis Number</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr ng-repeat="vehicle in vehicles.vehiclesData">
+            <thead>
+                <tr>
+                    <td>Model</td>
+                    <td>Make Year</td>
+                    <td>Engine Spec</td>
+                    <td>Chassis Number</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tr ng-repeat="vehicle in vehicles.vehiclesData | filter: vehicles.filterText">
                 <td>{{vehicle.model}}                       </td>
                 <td>{{vehicle.makeYear}}                    </td>
                 <td>{{vehicle.engineCapacityDisplayText}}   </td>
@@ -23,7 +41,9 @@
     </div>
 </div>
 
-<!-- inject:js -->
+
+
+<!-- Scripts Section -->
 <!-- Bootstrapping -->
 <script src="~/app/app.module.js"></script>
 

@@ -1,4 +1,5 @@
-﻿body {
+﻿/* Body */
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -9,6 +10,8 @@
     padding-right: 15px;
 }
 
+
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
@@ -16,6 +19,10 @@ textarea {
     max-width: 280px;
 }
 
+
+
+
+/* Basic Table */
 table, th, td {
     border: 1px solid grey;
     border-collapse: collapse;
@@ -28,4 +35,19 @@ table tr:nth-child(odd) {
 
 table tr:nth-child(even) {
     background-color: #ffffff;
+}
+
+thead{
+    font-weight: bold;
+}
+
+/* Simple Vertical EmptySpaces */
+.verticalEmptySpaceBig {
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
+.verticalEmptySpaceSmall {
+    padding-bottom: 2px;
+    padding-top: 2px;
 }
