@@ -120,4 +120,7 @@
   <data name="sCC" xml:space="preserve">
     <value>cc</value>
   </data>
+  <data name="sVehicleCannotBeDeletedReferencedElsewhereInSystem" xml:space="preserve">
+    <value>Vehicle cannot be deleted, as it is referenced elsewhere in the System</value>
+  </data>
 </root>

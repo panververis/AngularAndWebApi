@@ -68,5 +68,14 @@ namespace AngularAndWebApi {
                 return ResourceManager.GetString("sCC", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle cannot be deleted, as it is referenced elsewhere in the System.
+        /// </summary>
+        internal static string sVehicleCannotBeDeletedReferencedElsewhereInSystem {
+            get {
+                return ResourceManager.GetString("sVehicleCannotBeDeletedReferencedElsewhereInSystem", resourceCulture);
+            }
+        }
     }
 }

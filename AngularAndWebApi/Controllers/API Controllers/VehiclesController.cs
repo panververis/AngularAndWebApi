@@ -161,6 +161,16 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
                 return NotFound();
             }
 
+            // At this point perform the necessary pre-delete validations
+            bool canBeDeleted = PerformBeforeDeleteValidations(vehicle);
+            if (!canBeDeleted) {
+                Exception cannotBeDeletedException = new Exception(Resources.sVehicleCannotBeDeletedReferencedElsewhereInSystem);
+                Debug.WriteLine(cannotBeDeletedException.Message);
+
+                // Return an InternalServerError
+                return InternalServerError(cannotBeDeletedException);
+            }
+
             // Remove the referenced Vehicle from the DBContext's Vehicles
             _DB.Vehicles.Remove(vehicle);
 
@@ -181,7 +191,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
                 // ==> that is currently the Console / "Output"
                 Debug.WriteLine(exception.Message);
 
-                // lastly, return an InternalServerError
+                // Lastly, return an InternalServerError
                 return InternalServerError(exception);
             }
 
@@ -218,6 +228,31 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         /// </summary>
         private bool VehicleExists(int ID){
             return _DB.Vehicles.Count(e => e.ID == ID) > 0;
+        }
+
+        /// <summary>
+        /// Private helper method checking whether the provided as input Vehicle can be deleted
+        /// </summary>
+        private bool PerformBeforeDeleteValidations(Vehicle Vehicle) {
+            if (Vehicle == null) {
+                return false;
+            }
+
+            #region Check for Sales referencing the to-be-deleted Vehicle
+
+            // Getting an IQueryable on the Sales referencing this vehicle
+            IQueryable<Sale> relatedSalesQueryable = _DB.Sales.Where(x => x.VehicleID == Vehicle.ID);
+            if (relatedSalesQueryable == null) {
+                return false;
+            }
+            if (relatedSalesQueryable.Any()) {
+                return false;
+            }
+
+            #endregion
+
+            // Lastly, if all before-delete checks have passed, return true
+            return true;
         }
 
         #endregion
