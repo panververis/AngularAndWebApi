@@ -15,6 +15,7 @@
             <input type="text" ng-model="vehicles.filterText"/>
         </div>
 
+        <!-- Small "vertical" empty space -->
         <div class="verticalEmptySpaceSmall"></div>
 
         <!-- List (Table) View -->
@@ -34,7 +35,7 @@
                 <td>{{vehicle.makeYear}}                    </td>
                 <td>{{vehicle.engineCapacityDisplayText}}   </td>
                 <td>{{vehicle.chassisNumber}}               </td>
-                <td><i class="fa fa-trash"></i>             </td>
+                <td ng-click="vehicles.deleteVehicle(vehicle)"><i class="fa fa-trash"></i></td>
                 <td><i class="fa fa-edit"></i>              </td>
             </tr>
         </table>

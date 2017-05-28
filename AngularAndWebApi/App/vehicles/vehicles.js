@@ -11,12 +11,18 @@
     // Vehicles Controller
     function Vehicles(vehiclesService) {
 
+        // Getting an instance of the Angular Controller (ViewModel)
         var vm              = this;
+
+        // Controller properties
         vm.vehiclesData     = [];
         vm.vehiclesCount    = 0;
         vm.title            = 'Vehicles List View';
         vm.filterText       = "";
+
+        // Controller functions
         vm.clearFilterText  = clearFilterText;
+        vm.deleteVehicle    = deleteVehicle;
 
         // Invoking the Controller's activation
         activate();
@@ -39,6 +45,20 @@
         // Function clearing the filter text value
         function clearFilterText() {
             vm.filterText = "";
+        }
+
+        function deleteVehicle(vehicle) {
+            if (vehicle == null) {
+                return;
+            }
+
+            return vehiclesService.deleteVehicle(vehicle)
+                .then(function () {
+                    alert("Successful vehicle deletion!");
+                })
+                .catch(function () {
+                    alert("Vehicle deletion failed!");
+                });
         }
     }
 })();

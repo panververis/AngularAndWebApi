@@ -7,6 +7,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using AngularAndWebApi.Models;
 using AngularAndWebApi.Models.DTOs;
+using System;
+using System.Diagnostics;
 
 namespace AngularAndWebApi.Controllers.API_Controllers {
 
@@ -148,7 +150,7 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
         /// <summary>
         /// API Method Deleting a Vehicle
         /// </summary>
-        [ResponseType(typeof(Vehicle))]
+        [ResponseType(typeof(VehicleDTO))]
         public async Task<IHttpActionResult> DeleteVehicle(int ID) {
 
             // Fetching the referenced Vehicle
@@ -162,11 +164,38 @@ namespace AngularAndWebApi.Controllers.API_Controllers {
             // Remove the referenced Vehicle from the DBContext's Vehicles
             _DB.Vehicles.Remove(vehicle);
 
-            // Attempt to Save the Changes
-            await _DB.SaveChangesAsync();
+            // Attempt to Save the Changes.
+            // In case of an Exception, return an appropriate result
+            try {
+                await _DB.SaveChangesAsync();
+            } catch (Exception Ex) {
+
+                // Getting the Inner Exception, to display the proper exception message
+                Exception exception = Ex.InnerException != null
+                                        ? Ex.InnerException.InnerException != null
+                                            ? Ex.InnerException.InnerException
+                                            : Ex.InnerException
+                                        : Ex;
+
+                // Also append the Exception message to the Debug.Listeners collection
+                // ==> that is currently the Console / "Output"
+                Debug.WriteLine(exception.Message);
+
+                // lastly, return an InternalServerError
+                return InternalServerError(exception);
+            }
+
+            // Getting a VehicleDTO to send to the client
+            VehicleDTO vehicleDTO = new VehicleDTO() {
+                id              = vehicle.ID,
+                model           = vehicle.Model,
+                makeYear        = vehicle.MakeYear,
+                chassisNumber   = vehicle.ChassisNumber,
+                engineCapacity  = vehicle.EngineCapacity
+            };
 
             // Return an OkResult yielding the referenced Vehicle
-            return Ok(vehicle);
+            return Ok(vehicleDTO);
         }
 
         #endregion
